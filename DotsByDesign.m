@@ -95,4 +95,25 @@ set(gcf,'color','w');
 savefilename = ['Results/dbd2c_' filename '.png'];
 saveas(gcf,savefilename);
 
+%% extension (3)
+% edges are emphasized
+kernel = [[1 -1];[-1 1]];
+gradimg = conv2(img,kernel,'same');
 
+R = blkproc(gradimg, [nb nb], 'mean2');
+R = conv2(R,1/4*ones(2,2),'same');
+R = R - min(R(:));
+R = R./max(R(:));
+R = (rmax - rmin)*R + rmin;
+
+figure;
+for ii = 1:size(R,2)
+    for jj = 1:size(R,1)
+        plot(ii, size(R,1) - jj, '.b', 'MarkerSize',R(jj,ii));
+        hold on;
+    end
+end
+axis off; axis([1 size(R,2) 1 size(R,1)]); axis image;
+set(gcf,'color','w');
+savefilename = ['Results/dbde_' filename '.png'];
+saveas(gcf,savefilename);
